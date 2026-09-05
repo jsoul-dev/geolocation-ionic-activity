@@ -14,17 +14,17 @@
   <ion-button expand="block" color="danger" (click)="onStopWatching()" [disabled]="!isWatching">
     Stop Watching
   </ion-button>
-
-  <div class="coords-display">
-    <p>Latitude: <strong>{{ latitude }}</strong></p>
-    <p>Longitude: <strong>{{ longitude }}</strong></p>
-  </div>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar color="light">
     <ion-title style="font-size: 0.9rem;">
-      Start: Lat {{ latitude }}, Lng {{ longitude }}
+      Start: Lat {{ startLatitude }}, Lng {{ startLongitude }}
+    </ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="light">
+    <ion-title style="font-size: 0.9rem;">
+      Live: Lat {{ latitude }}, Lng {{ longitude }}
     </ion-title>
   </ion-toolbar>
 </ion-footer>

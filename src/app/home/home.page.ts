@@ -23,6 +23,8 @@ export class HomePage implements AfterViewInit {
 
   latitude: number = 0;
   longitude: number = 0;
+  startLatitude: number = 0;
+  startLongitude: number = 0;
   myLivePosition: any = null;
   isWatching: boolean = false;
 
@@ -47,6 +49,8 @@ export class HomePage implements AfterViewInit {
     if (start) {
       this.latitude = start.latitude;
       this.longitude = start.longitude;
+      this.startLatitude = start.latitude;
+      this.startLongitude = start.longitude;
       this.initMap();
     } else {
       this.myHeader = 'Geolocation API Error';
