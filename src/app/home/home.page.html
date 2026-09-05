@@ -30,9 +30,9 @@
 </ion-footer>
 
 <ion-alert
-  [isOpen]="isMyAlertOpen"
-  [header]="myHeader"
-  [message]="myMessage"
+  [isOpen]="showAlert"
+  [header]="alertHeader"
+  [message]="alertMessage"
   [buttons]="alertButtons"
-  (didDismiss)="isMyAlertOpen = false">
+  (didDismiss)="showAlert = false">
 </ion-alert>

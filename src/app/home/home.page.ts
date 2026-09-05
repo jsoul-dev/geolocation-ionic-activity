@@ -25,21 +25,21 @@ export class HomePage implements AfterViewInit {
   longitude: number = 0;
   startLatitude: number = 0;
   startLongitude: number = 0;
-  myLivePosition: any = null;
+  livePosition: any = null;
   isWatching: boolean = false;
 
-  isMyAlertOpen: boolean = false;
-  myHeader: string = '';
-  myMessage: string = '';
+  showAlert: boolean = false;
+  alertHeader: string = '';
+  alertMessage: string = '';
   alertButtons = ['OK'];
 
   constructor() {
     effect(() => {
-      const liveCoordinates = this.geoService.myLiveLotLong();
-      if (liveCoordinates) {
-        this.myLivePosition = liveCoordinates;
-        this.latitude = liveCoordinates.lats;
-        this.longitude = liveCoordinates.lungs;
+      const coords = this.geoService.liveCoords();
+      if (coords) {
+        this.livePosition = coords;
+        this.latitude = coords.lat;
+        this.longitude = coords.lng;
       }
     });
   }
@@ -53,9 +53,9 @@ export class HomePage implements AfterViewInit {
       this.startLongitude = start.longitude;
       this.initMap();
     } else {
-      this.myHeader = 'Geolocation API Error';
-      this.myMessage = 'Unable to get your current location. Please check your GPS and permissions.';
-      this.isMyAlertOpen = true;
+      this.alertHeader = 'Geolocation API Error';
+      this.alertMessage = 'Unable to get your current location. Please check your GPS and permissions.';
+      this.showAlert = true;
     }
   }
 

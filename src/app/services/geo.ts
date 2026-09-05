@@ -3,7 +3,7 @@ import { Geolocation } from '@capacitor/geolocation';
 
 @Service()
 export class Geo {
-  myLiveLotLong = signal<any>(null);
+  liveCoords = signal<any>(null);
   private watchId: string | undefined;
 
   async getLatLng() {
@@ -24,9 +24,9 @@ export class Geo {
       { enableHighAccuracy: true },
       (position, err) => {
         if (position) {
-          this.myLiveLotLong.set({
-            lats: position.coords.latitude,
-            lungs: position.coords.longitude
+          this.liveCoords.set({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
           });
         }
       }
