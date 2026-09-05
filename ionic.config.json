@@ -1,0 +1,7 @@
+{
+  "name": "Geolocation-Ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
