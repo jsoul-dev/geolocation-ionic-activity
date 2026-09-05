@@ -20,6 +20,9 @@ import { Geo } from '../services/geo';
 export class HomePage implements AfterViewInit {
   private geoService = inject(Geo);
   private map!: L.Map;
+  private liveMarker?: L.CircleMarker;
+  private startMarker?: L.CircleMarker;
+  private liveLine?: L.Polyline;
 
   latitude: number = 0;
   longitude: number = 0;
@@ -40,6 +43,11 @@ export class HomePage implements AfterViewInit {
         this.livePosition = coords;
         this.latitude = coords.lat;
         this.longitude = coords.lng;
+        
+        if (this.map) {
+          this.updateLiveMarker(coords.lat, coords.lng);
+          this.updateTrackingPath(coords.lat, coords.lng);
+        }
       }
     });
   }
@@ -70,6 +78,48 @@ export class HomePage implements AfterViewInit {
     setInterval(() => {
       this.map.invalidateSize();
     }, 200);
+
+    this.startMarker = L.circleMarker([this.startLatitude, this.startLongitude], {
+      radius: 6,
+      color: 'black',
+      fillColor: 'transparent',
+      weight: 3
+    }).addTo(this.map);
+  }
+
+  updateLiveMarker(lat: number, lng: number): void {
+    if (!this.liveMarker) {
+      this.liveMarker = L.circleMarker([lat, lng], {
+        radius: 8,
+        color: '#e91e63',
+        fillColor: '#e91e63',
+        fillOpacity: 0.3,
+        weight: 3
+      }).addTo(this.map);
+    } else {
+      this.liveMarker.setLatLng([lat, lng]);
+    }
+  }
+
+  updateTrackingPath(lat: number, lng: number): void {
+    const startLatLng = L.latLng(this.startLatitude, this.startLongitude);
+    const liveLatLng = L.latLng(lat, lng);
+    const distanceInMeters = startLatLng.distanceTo(liveLatLng);
+
+    if (!this.liveLine) {
+      this.liveLine = L.polyline([startLatLng, liveLatLng], {
+        color: 'blue',
+        weight: 2
+      })
+      .addTo(this.map)
+      .bindTooltip(`${distanceInMeters.toFixed(2)} meters`, {
+        permanent: true,
+        direction: 'top'
+      });
+    } else {
+      this.liveLine.setLatLngs([startLatLng, liveLatLng]);
+      this.liveLine.setTooltipContent(`${distanceInMeters.toFixed(2)} meters`);
+    }
   }
 
   async onStartWatching(): Promise<void> {
