@@ -5,42 +5,36 @@ import { Geolocation } from '@capacitor/geolocation';
 export class Geo {
   liveCoords = signal<any>(null);
   private watchId: string | undefined;
+  private mockInterval: any;
 
   async getLatLng() {
-    try {
-      const position = await Geolocation.getCurrentPosition();
-      return {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      };
-    } catch (err) {
-      console.error(err);
-      return null;
-    }
+    return {
+      latitude: 40.7128,
+      longitude: -74.0060
+    };
   }
 
   async startWatching() {
-    this.watchId = await Geolocation.watchPosition(
-      { enableHighAccuracy: true },
-      (position, err) => {
-        if (position) {
-          this.liveCoords.set({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
-        }
-      }
-    );
+    let currentLat = 40.7128;
+    let currentLng = -74.0060;
+
+    this.mockInterval = setInterval(() => {
+      currentLat += 0.00015;
+      currentLng += 0.00015;
+
+      this.liveCoords.set({
+        lat: currentLat,
+        lng: currentLng
+      });
+    }, 1500);
+
+    this.watchId = 'mock-watch';
   }
 
   async stopWatching() {
-    try {
-      if (this.watchId) {
-        await Geolocation.clearWatch({ id: this.watchId });
-        this.watchId = undefined;
-      }
-    } catch (err) {
-      console.error(err);
+    if (this.mockInterval) {
+      clearInterval(this.mockInterval);
     }
+    this.watchId = undefined;
   }
 }
