@@ -60,7 +60,7 @@ export class HomePage implements AfterViewInit {
   }
 
   initMap(): void {
-    this.map = L.map('mapa').setView([this.latitude, this.longitude], 19);
+    this.map = L.map('map').setView([this.latitude, this.longitude], 19);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
