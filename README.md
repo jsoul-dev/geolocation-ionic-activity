@@ -29,6 +29,7 @@ This project demonstrates real-time device geolocation tracking integrated with 
    ```bash
    npm install
    ```
+   *(Note: Running this command automatically reads the `package.json` file and installs the required core packages for this activity, specifically: `@capacitor/geolocation`, `leaflet`, and `@types/leaflet`).*
 
 3. Run the development server in your browser:
    ```bash
