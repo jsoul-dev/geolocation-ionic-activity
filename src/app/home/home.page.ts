@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, effect, inject } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, ChangeDetectorRef } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -19,6 +19,7 @@ import { Geo } from '../services/geo';
 })
 export class HomePage implements AfterViewInit {
   private geoService = inject(Geo);
+  private cdr = inject(ChangeDetectorRef);
   private map!: L.Map;
   private liveMarker?: L.CircleMarker;
   private startMarker?: L.CircleMarker;
@@ -48,6 +49,7 @@ export class HomePage implements AfterViewInit {
           this.updateLiveMarker(coords.lat, coords.lng);
           this.updateTrackingPath(coords.lat, coords.lng);
         }
+        this.cdr.detectChanges();
       }
     });
   }
