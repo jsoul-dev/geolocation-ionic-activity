@@ -9,14 +9,14 @@ export class Geo {
 
   async getLatLng() {
     return {
-      latitude: 40.7128,
-      longitude: -74.0060
+      latitude: 15.495495495495495,
+      longitude: 120.9924951323
     };
   }
 
   async startWatching() {
-    let currentLat = 40.7128;
-    let currentLng = -74.0060;
+    let currentLat = 15.495495495495495;
+    let currentLng = 120.9924951323;
 
     this.mockInterval = setInterval(() => {
       currentLat += 0.00015;
