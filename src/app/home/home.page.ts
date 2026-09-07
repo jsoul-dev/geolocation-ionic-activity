@@ -6,7 +6,10 @@ import {
   IonContent,
   IonButton,
   IonFooter,
-  IonAlert
+  IonAlert,
+  IonToggle,
+  IonItem,
+  IonLabel
 } from '@ionic/angular';
 import * as L from 'leaflet';
 import { Geo } from '../services/geo';
@@ -15,7 +18,7 @@ import { Geo } from '../services/geo';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonFooter, IonAlert],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonFooter, IonAlert, IonToggle, IonItem, IonLabel],
 })
 export class HomePage implements AfterViewInit {
   private geoService = inject(Geo);
@@ -124,6 +127,10 @@ export class HomePage implements AfterViewInit {
     }
   }
 
+  get isSimulation(): boolean {
+    return this.geoService.simulationMode();
+  }
+
   async onStartWatching(): Promise<void> {
     await this.geoService.startWatching();
     this.isWatching = true;
@@ -132,5 +139,46 @@ export class HomePage implements AfterViewInit {
   async onStopWatching(): Promise<void> {
     await this.geoService.stopWatching();
     this.isWatching = false;
+  }
+
+  async onToggleSimulation(): Promise<void> {
+    if (this.isWatching) {
+      await this.onStopWatching();
+    }
+
+    if (this.liveMarker) {
+      this.liveMarker.remove();
+      this.liveMarker = undefined;
+    }
+    if (this.liveLine) {
+      this.liveLine.remove();
+      this.liveLine = undefined;
+    }
+    if (this.startMarker) {
+      this.startMarker.remove();
+      this.startMarker = undefined;
+    }
+
+    this.geoService.toggleSimulation();
+    this.livePosition = null;
+
+    const start = await this.geoService.getLatLng();
+    if (start) {
+      this.latitude = start.latitude;
+      this.longitude = start.longitude;
+      this.startLatitude = start.latitude;
+      this.startLongitude = start.longitude;
+
+      this.map.setView([this.startLatitude, this.startLongitude], 19);
+
+      this.startMarker = L.circleMarker([this.startLatitude, this.startLongitude], {
+        radius: 6,
+        color: 'black',
+        fillColor: 'transparent',
+        weight: 3
+      }).addTo(this.map);
+    }
+
+    this.cdr.detectChanges();
   }
 }
